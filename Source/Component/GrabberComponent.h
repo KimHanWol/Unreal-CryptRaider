@@ -26,9 +26,24 @@ public:
 
 private:
 
+	class UPhysicsHandleComponent* GetPhysicsHandle() const;
+
+protected:
+
+	UFUNCTION(BlueprintCallable)
+	void BP_Grab();
+
+	UFUNCTION(BlueprintCallable)
+	void BP_Release();
+
+private:
+
 	UPROPERTY(EditAnywhere)
 	float MaxGrabDistance = 400.f;
 
 	UPROPERTY(EditAnywhere)
 	float GrabRadius = 100.f;
+
+	UPROPERTY(EditAnywhere)
+	float HoldDistance = 200.f;
 };

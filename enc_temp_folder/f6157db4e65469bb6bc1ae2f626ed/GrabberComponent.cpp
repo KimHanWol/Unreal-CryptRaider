@@ -36,11 +36,6 @@ void UGrabberComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 		return;
 	}
 
-	if (IsValid(PhysicsHandle->GetGrabbedComponent()) == false)
-	{
-		return;
-	}
-
 	FVector TargetLocation = GetComponentLocation() + GetForwardVector() * HoldDistance;
 	PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetComponentRotation());
 }
@@ -84,33 +79,17 @@ void UGrabberComponent::BP_Grab()
 
 	if (bHasHit == true)
 	{
-		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		if (IsValid(HitComponent) == true)
-		{
-			HitComponent->WakeAllRigidBodies();
-			PhysicsHandle->GrabComponentAtLocationWithRotation(
-				HitComponent,
-				NAME_None,
-				HitResult.ImpactPoint,
-				GetComponentRotation()
-			);
-		}
+		PhysicsHandle->GrabComponentAtLocationWithRotation(
+			HitResult.GetComponent(),
+			NAME_None,
+			HitResult.ImpactPoint,
+			GetComponentRotation()
+		);
 	}
 }
 
 void UGrabberComponent::BP_Release()
 {
-	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
-	if (IsValid(PhysicsHandle) == false)
-	{
-		return;
-	}
 
-	UPrimitiveComponent* GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
-	if (IsValid(GrabbedComponent) == true)
-	{
-		GrabbedComponent->WakeAllRigidBodies();
-		PhysicsHandle->ReleaseComponent();		
-	}
 }
 
