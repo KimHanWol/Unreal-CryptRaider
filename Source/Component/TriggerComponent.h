@@ -21,4 +21,22 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMover(class UMoverComponent* InMoverComponent);
+
+private:
+
+	AActor* GetAcceptableActor() const;
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	FName AcceptableActorTag;
+
+	UPROPERTY(Transient)
+	class UMoverComponent* MoverComponent;
 };
