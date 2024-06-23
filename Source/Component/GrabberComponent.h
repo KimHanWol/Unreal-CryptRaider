@@ -28,6 +28,8 @@ private:
 
 	class UPhysicsHandleComponent* GetPhysicsHandle() const;
 
+	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+
 protected:
 
 	UFUNCTION(BlueprintCallable)

@@ -57,12 +57,12 @@ UPhysicsHandleComponent* UGrabberComponent::GetPhysicsHandle() const
 	return PhysicsHandle;
 }
 
-void UGrabberComponent::BP_Grab()
+bool UGrabberComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 {
 	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
 	if (IsValid(PhysicsHandle) == false)
 	{
-		return;
+		return false;
 	}
 
 	FVector StartLocation = GetComponentLocation();
@@ -71,10 +71,9 @@ void UGrabberComponent::BP_Grab()
 	DrawDebugSphere(GetWorld(), EndLocation, 10.f, 10, FColor::Blue, false, 5.f);
 
 	FCollisionShape Shape = FCollisionShape::MakeSphere(GrabRadius);
-	FHitResult HitResult;
 	bool bHasHit = GetWorld()->SweepSingleByChannel
 	(
-		HitResult,
+		OutHitResult,
 		StartLocation,
 		EndLocation,
 		FQuat::Identity,
@@ -82,7 +81,20 @@ void UGrabberComponent::BP_Grab()
 		Shape
 	);
 
-	if (bHasHit == true)
+	return bHasHit;
+}
+
+void UGrabberComponent::BP_Grab()
+{
+	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
+	if (IsValid(PhysicsHandle) == false)
+	{
+		return;
+	}
+
+	FHitResult HitResult;
+	bool HasHit = GetGrabbableInReach(HitResult);
+	if (HasHit  == true)
 	{
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		if (IsValid(HitComponent) == true)
